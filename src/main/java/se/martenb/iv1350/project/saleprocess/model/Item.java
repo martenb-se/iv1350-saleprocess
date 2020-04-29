@@ -7,7 +7,7 @@ import se.martenb.iv1350.project.saleprocess.integration.ItemInSaleDTO;
 /**
  * Represents an item in an ongoing sale.
  */
-public class Item {
+class Item {
     private ItemInSaleDTO itemInSale;
     
     /**

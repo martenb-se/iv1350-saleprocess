@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Handler for converting {@link ReceiptDTO} data to printable data.
  */
-public class PrinterReceiptHandler {
+class PrinterReceiptHandler {
     ReceiptDTO receipt = null;
     
     private static final String COLUMN_SPACER_CHAR = " ";

@@ -14,7 +14,7 @@ import se.martenb.iv1350.project.saleprocess.util.Unit;
 /**
  * Represents sale information for ongoing sale.
  */
-public class SaleInformation {
+class SaleInformation {
     private static final Unit UNIT_PIECE = Unit.PIECE;
     
     private LocalDateTime saleTime;
