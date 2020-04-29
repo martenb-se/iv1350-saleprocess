@@ -6,7 +6,7 @@ package se.martenb.iv1350.project.saleprocess.integration;
  */
 public class StoreRegistry {
     /**
-     * Constructs a new  instance for communications with the external system.
+     * Constructs a new instance for communications with the external system.
      */
     public StoreRegistry() {
         

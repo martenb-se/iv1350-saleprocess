@@ -17,7 +17,7 @@ public class View {
     private static final int ITEM_BASE_QUANTITY = 1;
      
     /**
-     * Creates a new instance of a <code>View</code>.
+     * Creates a new instance of a {@link View}.
      * 
      * @param contr The controller responsible for communications 
      * with the model.
@@ -28,6 +28,8 @@ public class View {
     
     /**
      * Ends the sale and outputs the total price (incl. VAT).
+     * 
+     * @param stateOfSale State of the sale.
      */
     private void fakeExecutionEndSale(SaleDTO stateOfSale) {
         StringBuilder stringOutput = new StringBuilder();
@@ -40,6 +42,8 @@ public class View {
      * Get item information from the current sale about the specified item,
      * a <code>null</code> value is returned if item is not in the sale.
      * 
+     * @param itemInSaleList List with items in the sale.
+     * @param itemID The item ID to look for.
      * @return The found item or <code>null</code>.
      */
     private ItemInSaleDTO getItemInSale(List<ItemInSaleDTO> itemInSaleList, 
@@ -53,6 +57,10 @@ public class View {
     
     /**
      * Output after registering an item during fake execution.
+     * 
+     * @param stateOfSale The sale state.
+     * @param itemID The item ID.
+     * @param quantity The quantity of the item.
      */
     private void fakeExecutionItemRegistrationOutput(SaleDTO stateOfSale, 
             int itemID, int quantity) {
@@ -75,6 +83,7 @@ public class View {
     
     /**
      * Register an item during a fake execution.
+     * 
      * @param itemID The item to register.
      * @return State of sale after item registration
      */
@@ -89,6 +98,7 @@ public class View {
     
     /**
      * Register a specified amount of an item during a fake execution.
+     * 
      * @param itemID The item to register.
      * @param quantity The quantity of the item.
      * @return State of sale after item registration
@@ -108,7 +118,6 @@ public class View {
      * 
      * @param saleState Sale to pay for.
      * @param payment Payment amount.
-     * 
      * @return Information about the made purchase.
      */
     private PurchaseDTO fakeExecutionPayForSale(
@@ -127,7 +136,7 @@ public class View {
     
     /**
      * Run a fake execution of the application, calling all implemented 
-     * operations.
+     * public operations.
      */
     public void runFakeExecution() {
         System.setProperty("console.encoding", "UTF-8");

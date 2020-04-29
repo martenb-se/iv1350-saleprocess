@@ -18,18 +18,18 @@ public class Register {
     }
     
     /**
-     * Add an amount to the register
+     * Add an {@link Amount} to the register
      */
     void addAmount(Amount amountToAdd) {
         amount = amount.plus(amountToAdd);
     }
     
     /**
-     * Get the amount for this object.
+     * Get the {@link Amount} for this object.
      * 
      * @return The amount.
      */
-    public Amount getAmount() {
+    Amount getAmount() {
         return amount;
     }
 }

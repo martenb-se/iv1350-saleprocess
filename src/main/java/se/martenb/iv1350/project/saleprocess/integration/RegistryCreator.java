@@ -1,8 +1,8 @@
 package se.martenb.iv1350.project.saleprocess.integration;
 
 /**
- * RegistryCreator handles initiation of external registries such as
- * ItemRegistry, AccountingRegistry and StoreRegistry.
+ * {@link RegistryCreator} handles initiation of external registries such as
+ * {@link ItemRegistry}, {@link AccountingRegistry} and {@link StoreRegistry}.
  * 
  * TODO Add implementation of DiscountRegistry
  */

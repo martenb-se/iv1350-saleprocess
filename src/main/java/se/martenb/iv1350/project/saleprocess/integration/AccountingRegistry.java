@@ -1,8 +1,8 @@
 package se.martenb.iv1350.project.saleprocess.integration;
 
 /**
- * AccountingRegistry handles communications with an external accounting 
- * registry/system.
+ * {@link AccountingRegistry} handles communications with an external 
+ * accounting registry/system.
  */
 public class AccountingRegistry {
     /**

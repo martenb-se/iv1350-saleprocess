@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ItemRegistry handles communications with an external item 
+ * {@link ItemRegistry} handles communications with an external item 
  * inventory/system.
  */
 public class ItemRegistry {

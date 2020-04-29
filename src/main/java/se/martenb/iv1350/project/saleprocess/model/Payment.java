@@ -20,8 +20,8 @@ public class Payment {
     
     /**
      * Creates a new instance of an ongoing sale and sets the sale time to
-     * the current date/time.Discounts are not yet implemented and defaulted to 0. 
-     * 
+     * the current date/time. Discounts are not yet implemented and 
+     * defaulted to 0. 
      * 
      * @param saleState Sale to handle payment for.
      * @param storeRegistry Registry containing store information.

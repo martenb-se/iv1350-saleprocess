@@ -28,7 +28,7 @@ public class Controller {
     private Sale sale;
     
     /**
-     * Creates a new instance of a <code>Controller</code>. 
+     * Creates a new instance of a {@link Controller}. 
      * 
      * @param printer The printer later responsible for printing receipts.
      */
@@ -49,7 +49,7 @@ public class Controller {
     }
     
     /**
-     * Start a new sale and create a new <code>Sale</code> instance.
+     * Start a new sale and create a new {@link Sale} instance.
      */
     public void startSale() {
         this.sale = new Sale();
@@ -75,6 +75,7 @@ public class Controller {
     
     /**
      * Register payment and end the sale.
+     * 
      * @param saleState Sale to register payment to.
      * @param amountPaid The paid amount.
      * @return Information about the purchase

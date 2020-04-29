@@ -15,7 +15,7 @@ public class Item {
      * 
      * @param itemInSale Item in sale information.
      */
-    public Item(ItemInSaleDTO itemInSale) {
+    Item(ItemInSaleDTO itemInSale) {
         this.itemInSale = itemInSale;
     }
 
@@ -23,9 +23,9 @@ public class Item {
      * Get all information as a {@link ItemInSaleDTO} for the current item 
      * in sale.
      * 
-     * @return <code>ItemInSaleDTO</code> containing information about the item.
+     * @return {@link ItemInSaleDTO} containing information about the item.
      */
-    public ItemInSaleDTO getItemInSale() {
+    ItemInSaleDTO getItemInSale() {
         return itemInSale;
     }
     
@@ -48,8 +48,8 @@ public class Item {
     }
     
     /**
-     * Updates the numerical value quantity and return a new Quantity object
-     * with updated info.
+     * Updates the numerical value quantity and return a new {@link Quantity} 
+     * object with updated info.
      * 
      * @param numericalQuantity Value to set the new quantity to.
      * 

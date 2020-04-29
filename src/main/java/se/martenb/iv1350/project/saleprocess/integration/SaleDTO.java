@@ -17,16 +17,16 @@ public class SaleDTO {
     /**
      * Creates a new instance of a sale object. 
      * 
-     * @param saleDateTime
-     * @param runningTotal
-     * @param priceListInitial
-     * @param totalItems
+     * @param saleDateTime Date and time of the sale.
+     * @param runningTotal Running total of the sale.
+     * @param itemsInSaleList List of items in the sale.
+     * @param totalItems Total number of items in the sale.
      */
     public SaleDTO(LocalDateTime saleDateTime, Amount runningTotal, 
-            List<ItemInSaleDTO> priceListInitial, int totalItems) {
+            List<ItemInSaleDTO> itemsInSaleList, int totalItems) {
         this.saleDateTime = saleDateTime;
         this.runningTotal = runningTotal;
-        this.itemsInSale = priceListInitial;
+        this.itemsInSale = itemsInSaleList;
         this.totalItems = totalItems;
     }
 

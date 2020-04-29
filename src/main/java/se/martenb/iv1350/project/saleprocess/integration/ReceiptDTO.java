@@ -6,7 +6,6 @@ import se.martenb.iv1350.project.saleprocess.util.Amount;
  * Represents a receipt containing information about a purchase. Information
  * about the store, information about the purchase and total amount 
  * of discounts.
- * 
  */
 public class ReceiptDTO {
     private final StoreDTO storeInfo;
@@ -17,10 +16,10 @@ public class ReceiptDTO {
     /**
      * Creates a new instance, representing the receipt.
      * 
-     * @param storeInfo
-     * @param purchaseInfo
-     * @param totalDiscount
-     * @param saleInfo
+     * @param storeInfo The store information.
+     * @param purchaseInfo The purchase information.
+     * @param totalDiscount The applied total discount.
+     * @param saleInfo The state of the sale.
     */
     public ReceiptDTO(StoreDTO storeInfo, PurchaseDTO purchaseInfo, 
             Amount totalDiscount, SaleDTO saleInfo) {

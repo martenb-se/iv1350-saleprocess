@@ -21,7 +21,7 @@ public class Quantity {
     }
     
     /**
-     * Get the numerical value for this Quantity object.
+     * Get the numerical value for this {@link Quantity} object.
      * 
      * @return The numerical value.
      */
@@ -30,7 +30,7 @@ public class Quantity {
     }
     
     /**
-     * Get the type of unit for this Quantity object.
+     * Get the type of unit for this {@link Quantity} object.
      * 
      * @return The unit type.
      */

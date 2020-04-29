@@ -1,6 +1,5 @@
 package se.martenb.iv1350.project.saleprocess.util;
 
-import se.martenb.iv1350.project.saleprocess.util.Amount;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

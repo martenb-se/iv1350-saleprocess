@@ -5,7 +5,8 @@ import se.martenb.iv1350.project.saleprocess.integration.Printer;
 import se.martenb.iv1350.project.saleprocess.view.View;
 
 /**
- * Starts the entire application, contains the main method used to start the application.
+ * Starts the entire application, contains the main method used to start 
+ * the application.
  */
 public class Main {
     /**

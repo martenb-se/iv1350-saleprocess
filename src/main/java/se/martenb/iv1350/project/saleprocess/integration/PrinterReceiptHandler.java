@@ -34,7 +34,7 @@ public class PrinterReceiptHandler {
      * Creates a new handler for {@link ReceiptDTO}
      * @param receipt The {@link ReceiptDTO} to handle.
      */
-    public PrinterReceiptHandler(ReceiptDTO receipt) {
+    PrinterReceiptHandler(ReceiptDTO receipt) {
         this.receipt = receipt;
     }
     

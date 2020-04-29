@@ -26,7 +26,7 @@ public class SaleInformation {
      * Creates a new instance of a sale information object that goes along
      * with an ongoing sale.
      */
-    public SaleInformation() {
+    SaleInformation() {
         runningTotal = new Amount(0);
     }
     
@@ -42,7 +42,7 @@ public class SaleInformation {
      * 
      * @return Sale time ({@link LocalDateTime}) for current sale.
      */
-    public LocalDateTime getSaleTime() {
+    LocalDateTime getSaleTime() {
         return this.saleTime;
     }
     
