@@ -45,9 +45,7 @@ Project for the course iV1350 (Object Oriented Design) at KTH (https://www.kth.s
 
                          The Leftorium                         
 
-                        Baker Street 99                        
-                             31415                             
-                          Gotham City                          
+              Baker Street 99, 31415 Gotham City               
 
 Item name              Quantity      Unit price           Total
 Amazing Fruit Cereal       2 pc    62.63 SEK/pc      125.26 SEK
@@ -59,7 +57,7 @@ Total amount                                         256.31 SEK
 Paid amount                                         2000.00 SEK
 Change returned                                     1743.69 SEK
 
-                    2020-04-29 at 09:26:35                     
+                    2020-04-29 at 05:25:17                     
 
 
 [PRINTING HAS FINISHED]
