@@ -15,8 +15,8 @@ public class Amount {
     
     /**
      * Creates a new instance, representing the specified amount.
-     * Sets the currency to the standard currency and sets the precision to the
-     * specified precision.
+     * Sets the currency to the standard currency and sets the decimal 
+     * precision to the specified precision.
      * 
      * @param amount The amount represented by the newly created instance.
      * 
@@ -29,8 +29,8 @@ public class Amount {
     
     /**
      * Creates a new instance, representing the specified amount.
-     * Sets the currency to the standard currency and sets the precision to the
-     * specified precision.
+     * Sets the currency to the standard currency and sets the decimal 
+     * precision to the specified precision.
      * 
      * @param amount The amount represented by the newly created instance.
      * 

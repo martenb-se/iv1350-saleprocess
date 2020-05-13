@@ -2,7 +2,7 @@ package se.martenb.iv1350.project.saleprocess.model;
 
 import se.martenb.iv1350.project.saleprocess.util.Unit;
 import se.martenb.iv1350.project.saleprocess.util.Quantity;
-import se.martenb.iv1350.project.saleprocess.integration.ItemInSaleDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.ItemInSaleDTO;
 
 /**
  * Represents an item in an ongoing sale.

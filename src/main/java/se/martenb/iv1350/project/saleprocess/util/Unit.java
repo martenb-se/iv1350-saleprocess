@@ -6,17 +6,17 @@ package se.martenb.iv1350.project.saleprocess.util;
 public enum Unit {
 
     /**
-     * Represents an item that valued in pieces.
+     * Represents an item that is valued by each piece.
      */
     PIECE,
 
     /**
-     * Represents an item that valued by its weight.
+     * Represents an item that is valued by its weight.
      */
     KILOGRAM,
 
     /**
-     * Represents an item that valued by its volume.
+     * Represents an item that is valued by its volume.
      */
     LITRE
 }

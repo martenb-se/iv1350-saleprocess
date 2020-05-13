@@ -1,5 +1,7 @@
 se.martenb.iv1350.project.saleprocess.controller
 se.martenb.iv1350.project.saleprocess.integration
+se.martenb.iv1350.project.saleprocess.integration.discount
+se.martenb.iv1350.project.saleprocess.integration.dto
 se.martenb.iv1350.project.saleprocess.model
 se.martenb.iv1350.project.saleprocess.startup
 se.martenb.iv1350.project.saleprocess.util

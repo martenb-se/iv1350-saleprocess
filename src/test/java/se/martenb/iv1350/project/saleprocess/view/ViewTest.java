@@ -1,6 +1,7 @@
 package se.martenb.iv1350.project.saleprocess.view;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,13 +9,17 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import se.martenb.iv1350.project.saleprocess.controller.Controller;
 import se.martenb.iv1350.project.saleprocess.integration.Printer;
+import se.martenb.iv1350.project.saleprocess.testing.TestingEnvironment;
 
 public class ViewTest {
     private ByteArrayOutputStream printoutBuffer;
     private PrintStream originalSysOut;
-    
+    private TestingEnvironment testEnv;
+
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws IOException {
+        testEnv = new TestingEnvironment();
+        testEnv.backupErrorLog();
         printoutBuffer = new ByteArrayOutputStream();
         PrintStream inMemSysOut = new PrintStream(printoutBuffer);
         originalSysOut = System.out;
@@ -22,9 +27,11 @@ public class ViewTest {
     }
     
     @AfterEach
-    public void tearDown() {
+    public void tearDown() throws IOException {
         printoutBuffer = null;
         System.setOut(originalSysOut);
+        testEnv.restoreErrorLog();
+        testEnv = null;
     }
 
     @Test

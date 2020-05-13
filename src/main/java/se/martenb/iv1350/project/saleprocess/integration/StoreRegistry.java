@@ -1,5 +1,8 @@
 package se.martenb.iv1350.project.saleprocess.integration;
 
+import se.martenb.iv1350.project.saleprocess.integration.dto.StoreDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.AddressDTO;
+
 /**
  * Store registry handles communications with an external store information
  * registry.
@@ -8,9 +11,7 @@ public class StoreRegistry {
     /**
      * Constructs a new instance for communications with the external system.
      */
-    public StoreRegistry() {
-        
-    }
+    public StoreRegistry() {}
     
     /**
      * Dirty dummy for fetching store information from the external registry.

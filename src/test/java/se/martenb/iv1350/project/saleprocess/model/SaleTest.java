@@ -5,10 +5,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import se.martenb.iv1350.project.saleprocess.util.Amount;
-import se.martenb.iv1350.project.saleprocess.integration.ItemDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.ItemDTO;
 import se.martenb.iv1350.project.saleprocess.util.Price;
-import se.martenb.iv1350.project.saleprocess.integration.SaleDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.SaleDTO;
 import se.martenb.iv1350.project.saleprocess.testing.TestingObjectCreator;
+import se.martenb.iv1350.project.saleprocess.util.Quantity;
 
 public class SaleTest {
     Sale saleInitial;
@@ -22,8 +23,8 @@ public class SaleTest {
     private static final double ITEM_PRICE_B = 200.50;
     private static final double ITEM_VAT_A = 12.0;
     private static final double ITEM_VAT_B = 10.5;
-    private static final int ITEM_QUANT_A = 1;
-    private static final int ITEM_QUANT_B = 5;
+    private static final Quantity ITEM_QUANT_A = new Quantity(1);
+    private static final Quantity ITEM_QUANT_B = new Quantity(1);
     
     @BeforeEach
     public void setUp() {
@@ -38,14 +39,15 @@ public class SaleTest {
     }
     
     private SaleDTO makeItemAndAddToSale(int itemID, String itemName, 
-            double priceBeforeTaxes, double vatTaxRate, int itemQuantity) {
+            double priceBeforeTaxes, double vatTaxRate, Quantity itemQuantity) 
+            throws IllegalItemQuantityException {
         ItemDTO itemToAdd = testObjCr.makeItemDTOSimple(
                 itemID, itemName, priceBeforeTaxes, vatTaxRate);
         return saleInitial.addItemToSale(itemToAdd, itemQuantity);
     }
 
     @Test
-    public void testAddItemToEmptySale() {
+    public void testAddItemToEmptySale() throws IllegalItemQuantityException {
         SaleDTO saleDTO = makeItemAndAddToSale(ITEM_ID_A, ITEM_NAME_A, 
                 ITEM_PRICE_A, ITEM_VAT_A, ITEM_QUANT_A);
         boolean isItemInSale = testObjCr.wasItemAddedToSale(saleDTO, ITEM_ID_A);
@@ -54,21 +56,23 @@ public class SaleTest {
     }
     
     @Test
-    public void testAddItemTotalItems() {
+    public void testAddItemTotalItems() throws IllegalItemQuantityException {
         SaleDTO saleDTO = makeItemAndAddToSale(ITEM_ID_A, ITEM_NAME_A, 
                 ITEM_PRICE_A, ITEM_VAT_A, ITEM_QUANT_A);
-        double expResult = ITEM_QUANT_A;
+        double expResult = ITEM_QUANT_A.getNumericalValue();
         double result = testObjCr.getTotalItemsOfSale(saleDTO);
         
         assertEquals(expResult, result, "Total number of items incorrect.");
     }
     
     @Test
-    public void testAddItemRunningTotal() {
+    public void testAddItemRunningTotal() throws IllegalItemQuantityException {
         SaleDTO saleDTO = makeItemAndAddToSale(ITEM_ID_A, ITEM_NAME_A, 
                 ITEM_PRICE_A, ITEM_VAT_A, ITEM_QUANT_A);
         Price itemPrice = testObjCr.makePrice(ITEM_PRICE_A, ITEM_VAT_A);
-        Amount totalPrice = itemPrice.getPriceAfterTax().multiply(ITEM_QUANT_A);
+        Amount totalPrice = itemPrice.
+                getPriceAfterTax().
+                multiply(ITEM_QUANT_A.getNumericalValue());
         Amount expResult = totalPrice;
         Amount result = saleDTO.getRunningTotal();
 
@@ -76,7 +80,7 @@ public class SaleTest {
     }
     
     @Test
-    public void testAddItemToSaleZeroID() {
+    public void testAddItemToSaleZeroID() throws IllegalItemQuantityException {
         int itemID = 0;
         SaleDTO saleDTO = makeItemAndAddToSale(itemID, ITEM_NAME_A, 
                 ITEM_PRICE_A, ITEM_VAT_A, ITEM_QUANT_A);
@@ -86,7 +90,7 @@ public class SaleTest {
     }
     
     @Test
-    public void testAddItemToSaleNegativeID() {
+    public void testAddItemToSaleNegativeID() throws IllegalItemQuantityException {
         int itemID = -1;
         SaleDTO saleDTO = makeItemAndAddToSale(itemID, ITEM_NAME_A, 
                 ITEM_PRICE_A, ITEM_VAT_A, ITEM_QUANT_A);
@@ -96,7 +100,7 @@ public class SaleTest {
     }
     
     @Test
-    public void testAddItemToSaleMaxIntID() {
+    public void testAddItemToSaleMaxIntID() throws IllegalItemQuantityException {
         int itemID = Integer.MAX_VALUE;
         SaleDTO saleDTO = makeItemAndAddToSale(itemID, ITEM_NAME_A, 
                 ITEM_PRICE_A, ITEM_VAT_A, ITEM_QUANT_A);
@@ -106,7 +110,7 @@ public class SaleTest {
     }
     
     @Test
-    public void testAddItemToSaleMinIntID() {
+    public void testAddItemToSaleMinIntID() throws IllegalItemQuantityException {
         int itemID = Integer.MIN_VALUE;
         SaleDTO saleDTO = makeItemAndAddToSale(itemID, ITEM_NAME_A, 
                 ITEM_PRICE_A, ITEM_VAT_A, ITEM_QUANT_A);
@@ -116,7 +120,7 @@ public class SaleTest {
     }
     
     @Test
-    public void testAddTwoItemsToSale() {
+    public void testAddTwoItemsToSale() throws IllegalItemQuantityException {
         SaleDTO saleDTO = makeItemAndAddToSale(ITEM_ID_A, ITEM_NAME_A, 
                 ITEM_PRICE_A, ITEM_VAT_A, ITEM_QUANT_A);
         saleDTO = makeItemAndAddToSale(ITEM_ID_B, ITEM_NAME_B, ITEM_PRICE_B, 
@@ -131,19 +135,22 @@ public class SaleTest {
     }
     
     @Test
-    public void testAddTwoItemsToSaleTotalItems() {
+    public void testAddTwoItemsToSaleTotalItems() 
+            throws IllegalItemQuantityException {
         SaleDTO saleDTO = makeItemAndAddToSale(ITEM_ID_A, ITEM_NAME_A, 
                 ITEM_PRICE_A, ITEM_VAT_A, ITEM_QUANT_A);
         saleDTO = makeItemAndAddToSale(ITEM_ID_B, ITEM_NAME_B, ITEM_PRICE_B, 
                 ITEM_VAT_B, ITEM_QUANT_B);
-        double expResult = ITEM_QUANT_A + ITEM_QUANT_B;
+        double expResult = ITEM_QUANT_A.getNumericalValue() + 
+                ITEM_QUANT_B.getNumericalValue();
         double result = testObjCr.getTotalItemsOfSale(saleDTO);
         
         assertEquals(expResult, result, "Total number of items incorrect.");
     }
     
     @Test
-    public void testAddTwoItemsToSaleRunningTotal() {
+    public void testAddTwoItemsToSaleRunningTotal() 
+            throws IllegalItemQuantityException {
         SaleDTO saleDTO = makeItemAndAddToSale(ITEM_ID_A, ITEM_NAME_A, 
                 ITEM_PRICE_A, ITEM_VAT_A, ITEM_QUANT_A);
         saleDTO = makeItemAndAddToSale(ITEM_ID_B, ITEM_NAME_B, ITEM_PRICE_B, 
@@ -151,9 +158,13 @@ public class SaleTest {
         Price itemPriceA = testObjCr.makePrice(ITEM_PRICE_A, ITEM_VAT_A);
         Price itemPriceB = testObjCr.makePrice(ITEM_PRICE_B, ITEM_VAT_B);
         Amount totalPriceA = 
-                itemPriceA.getPriceAfterTax().multiply(ITEM_QUANT_A);
+                itemPriceA.
+                        getPriceAfterTax().
+                        multiply(ITEM_QUANT_A.getNumericalValue());
         Amount totalPriceB = 
-                itemPriceB.getPriceAfterTax().multiply(ITEM_QUANT_B);
+                itemPriceB.
+                        getPriceAfterTax().
+                        multiply(ITEM_QUANT_B.getNumericalValue());
         Amount combinedTotal = totalPriceA.plus(totalPriceB);
         Amount expResult = combinedTotal;
         Amount result = saleDTO.getRunningTotal();
@@ -162,12 +173,12 @@ public class SaleTest {
     }
     
     @Test
-    public void testAddItemToSaleTwice() {
+    public void testAddItemToSaleTwice() throws IllegalItemQuantityException {
         SaleDTO saleDTO = makeItemAndAddToSale(ITEM_ID_A, ITEM_NAME_A, 
                 ITEM_PRICE_A, ITEM_VAT_A, ITEM_QUANT_A);
         saleDTO = saleDTO = makeItemAndAddToSale(ITEM_ID_A, ITEM_NAME_A, 
                 ITEM_PRICE_A, ITEM_VAT_A, ITEM_QUANT_A);
-        double expResult = ITEM_QUANT_A * 2;
+        double expResult = ITEM_QUANT_A.getNumericalValue() * 2;
         double result = testObjCr.quantityOfItemAddedToSale(saleDTO, 
                 ITEM_ID_A);
         
@@ -175,26 +186,30 @@ public class SaleTest {
     }
     
     @Test
-    public void testAddItemToSaleTwiceTotalItems() {
+    public void testAddItemToSaleTwiceTotalItems() 
+            throws IllegalItemQuantityException {
         SaleDTO saleDTO = makeItemAndAddToSale(ITEM_ID_A, ITEM_NAME_A, 
                 ITEM_PRICE_A, ITEM_VAT_A, ITEM_QUANT_A);
         saleDTO = saleDTO = makeItemAndAddToSale(ITEM_ID_A, ITEM_NAME_A, 
                 ITEM_PRICE_A, ITEM_VAT_A, ITEM_QUANT_A);
-        double expResult = ITEM_QUANT_A * 2;
+        double expResult = ITEM_QUANT_A.getNumericalValue() * 2;
         double result = testObjCr.getTotalItemsOfSale(saleDTO);
         
         assertEquals(expResult, result, "Total number of items incorrect.");
     }
     
     @Test
-    public void testAddItemToSaleTwiceRunningTotal() {
+    public void testAddItemToSaleTwiceRunningTotal() 
+            throws IllegalItemQuantityException {
         SaleDTO saleDTO = makeItemAndAddToSale(ITEM_ID_A, ITEM_NAME_A, 
                 ITEM_PRICE_A, ITEM_VAT_A, ITEM_QUANT_A);
         saleDTO = saleDTO = makeItemAndAddToSale(ITEM_ID_A, ITEM_NAME_A, 
                 ITEM_PRICE_A, ITEM_VAT_A, ITEM_QUANT_A);
         Price itemPrice = testObjCr.makePrice(ITEM_PRICE_A, ITEM_VAT_A);
         Amount totalPrice = 
-                itemPrice.getPriceAfterTax().multiply(ITEM_QUANT_A * 2);
+                itemPrice.
+                        getPriceAfterTax().
+                        multiply(ITEM_QUANT_A.getNumericalValue() * 2);
         Amount expResult = totalPrice;
         Amount result = saleDTO.getRunningTotal();
         
@@ -203,36 +218,39 @@ public class SaleTest {
     
     @Test
     public void testAddZeroItemToSaleException() {
-        int itemQuantity = 0;
+        Quantity itemQuantity = new Quantity(0);
         ItemDTO itemToAdd = testObjCr.makeItemDTOSimple(
                 ITEM_ID_A, ITEM_NAME_A, ITEM_PRICE_A, ITEM_VAT_A);
         try {
             SaleDTO stateSaleDTO = saleInitial.addItemToSale(
                 itemToAdd, itemQuantity);
-            fail("Added illegal quantity of item to sale.");
-        } catch(Exception e) {
-            boolean correctExceptionThrown = 
-                    e instanceof IllegalArgumentException;
-            assertTrue(correctExceptionThrown, 
-                    "Wrong exception thrown when adding illegal quantity.");
+            fail("Added item with invalid quantity to sale.");
+        } catch (IllegalItemQuantityException exc) {
+            assertEquals(
+                    itemQuantity.getNumericalValue(), 
+                    exc.getIllegalQuantity().getNumericalValue(), 
+                    "Wrong exception message, does not contain " + 
+                            " specified quantity:" +
+                            exc.getMessage());
         }
-        
     }
     
     @Test
     public void testAddNegativeItemToSaleException() {
-        int itemQuantity = -10;
+        Quantity itemQuantity = new Quantity(-10);
         ItemDTO itemToAdd = testObjCr.makeItemDTOSimple(
                 ITEM_ID_A, ITEM_NAME_A, ITEM_PRICE_A, ITEM_VAT_A);
         try {
             SaleDTO stateSaleDTO = saleInitial.addItemToSale(
                 itemToAdd, itemQuantity);
-            fail("Added illegal quantity of item to sale.");
-        } catch(Exception e) {
-            boolean correctExceptionThrown = 
-                    e instanceof IllegalArgumentException;
-            assertTrue(correctExceptionThrown, 
-                    "Wrong exception thrown when adding illegal quantity.");
+            fail("Added item with invalid quantity to sale.");
+        } catch (IllegalItemQuantityException exc) {
+            assertEquals(
+                    itemQuantity.getNumericalValue(), 
+                    exc.getIllegalQuantity().getNumericalValue(), 
+                    "Wrong exception message, does not contain " + 
+                            " specified quantity:" +
+                            exc.getMessage());
         }
         
     }

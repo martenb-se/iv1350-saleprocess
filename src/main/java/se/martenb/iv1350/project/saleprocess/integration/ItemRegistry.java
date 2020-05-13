@@ -1,5 +1,7 @@
 package se.martenb.iv1350.project.saleprocess.integration;
 
+import se.martenb.iv1350.project.saleprocess.integration.dto.SaleDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.ItemDTO;
 import se.martenb.iv1350.project.saleprocess.util.Amount;
 import se.martenb.iv1350.project.saleprocess.util.Price;
 import java.util.ArrayList;
@@ -75,7 +77,7 @@ public class ItemRegistry {
      */
     private void dummyMakeAndAdd100ItemsToDB() {
         double dummyStartBasePrice = 1.07;
-        double dummyStartVATTaxRateOfItem = 12.00;
+        double[] dummyStartVATTaxRateOfItem = new double[] {6.00, 12.00, 25.00};
         String[] dummyItemNamesPart1Array = new String[] {"Tasty","Luxury",
             "Amazing","Organic","Healthy"};
         String[] dummyItemNamesPart2Array = new String[] {"Chocolate","Fruit",
@@ -88,7 +90,7 @@ public class ItemRegistry {
                             dummyItemNamesPart2Array[(i/4)%4] + " " +
                             dummyItemNamesPart3Array[i%4], 
                     dummyStartBasePrice * (i+1), 
-                    dummyStartVATTaxRateOfItem - i*0.03);
+                    dummyStartVATTaxRateOfItem[i%3]);
             dummyAddItemToDB(dummyItem);
         }
     }
@@ -117,29 +119,50 @@ public class ItemRegistry {
      * in an {@link ItemDTO} object. If there's no match, a null value is
      * returned.
      * 
+     * Contains hard coded error that causes database connection failure
+     * when searching for id 999999999.
+     * 
      * @param itemID The item id to search for.
      * @return {@link ItemDTO} object containing information about found
      * item or null if no item was found.
      */
     private ItemDTO dummySequentialIDSearchInDB(int itemID) {
+        int hardcodedFailureID = 999999999;
+        if (itemID == hardcodedFailureID)
+            throw new ItemRegistryException("Database connection failed.");
         ItemDTO foundItem = null;
         for (ItemDTO itemInDB : dummyItemDB)
             if(dummyDoesItemIDMatchItemInDB(itemID, itemInDB))
                 foundItem = itemInDB;
-        return foundItem; 
+        return foundItem;
+    }
+    
+    /**
+     * Check if an item exists in the database.
+     * 
+     * @param itemID Item to search for.
+     * @return <code>true</code> if the item was found, 
+     * otherwise <code>false</code>.
+     */
+    public boolean isItemInDB(int itemID) {
+        ItemDTO gottenItem = dummySequentialIDSearchInDB(itemID);
+        boolean isItemInDB = gottenItem != null;
+        return isItemInDB;
     }
     
     /**
      * Get information about the item from the database specified by the
-     * item id. If no item is found with the ID, a <code>null</code> value 
-     * is returned.
+     * item id. 
      * 
-     * @param itemID Item ID to look for.
-     * @return The item containing the item ID or null if no item was found.
+     * @param itemID Item to get information about.
+     * @return The item containing the item ID.
      */
     public ItemDTO getItemInfo(int itemID) {
-        ItemDTO foundItem = dummySequentialIDSearchInDB(itemID);
-        return foundItem;
+        ItemDTO gottenItem = dummySequentialIDSearchInDB(itemID);
+        if (gottenItem == null)
+            throw new ItemRegistryException("Item not in database, " + 
+                    "use isItemInDB(itemID) before getItemInfo(itemID).");
+        return gottenItem;
     } 
     
     /**

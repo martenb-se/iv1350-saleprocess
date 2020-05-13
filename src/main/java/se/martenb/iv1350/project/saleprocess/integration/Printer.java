@@ -1,5 +1,7 @@
 package se.martenb.iv1350.project.saleprocess.integration;
 
+import se.martenb.iv1350.project.saleprocess.integration.dto.ReceiptDTO;
+
 /**
  * Representing communications with a real printer.
  */

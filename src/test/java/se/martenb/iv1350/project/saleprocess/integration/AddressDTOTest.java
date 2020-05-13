@@ -1,5 +1,6 @@
 package se.martenb.iv1350.project.saleprocess.integration;
 
+import se.martenb.iv1350.project.saleprocess.integration.dto.AddressDTO;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

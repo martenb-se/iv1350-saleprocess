@@ -1,0 +1,10 @@
+[2020-05-13 17:18:04:3036] Exception was thrown: Database connection failed.
+printStackTrace:
+se.martenb.iv1350.project.saleprocess.integration.ItemRegistryException: Database connection failed.
+	at se.martenb.iv1350.project.saleprocess.integration.ItemRegistry.dummySequentialIDSearchInDB(ItemRegistry.java:132)
+	at se.martenb.iv1350.project.saleprocess.integration.ItemRegistry.isItemInDB(ItemRegistry.java:148)
+	at se.martenb.iv1350.project.saleprocess.controller.Controller.registerItem(Controller.java:92)
+	at se.martenb.iv1350.project.saleprocess.view.View.fakeExecutionItemRegistration(View.java:128)
+	at se.martenb.iv1350.project.saleprocess.view.View.runFakeExecution(View.java:234)
+	at se.martenb.iv1350.project.saleprocess.startup.Main.main(Main.java:21)
+

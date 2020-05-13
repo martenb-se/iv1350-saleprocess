@@ -1,5 +1,10 @@
 package se.martenb.iv1350.project.saleprocess.integration;
 
+import se.martenb.iv1350.project.saleprocess.integration.dto.ItemInSaleDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.PurchaseDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.SaleDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.ReceiptDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.StoreDTO;
 import se.martenb.iv1350.project.saleprocess.util.PriceTotal;
 import se.martenb.iv1350.project.saleprocess.util.Amount;
 import java.io.ByteArrayOutputStream;
@@ -142,17 +147,18 @@ public class PrinterTest {
                         itemInSale.getItemInfo().getItemName())).
                     append(COLUMN_SPACER_CHAR.repeat(COLUMN_SPACER_WIDTH)).
                     append(String.format(itemTableFormatQuantityColumn(), 
-                            (int) itemInSale.
-                                getItemQuantity().
-                                getNumericalValue() + 
-                            " pc")).
+                            itemInSale.
+                                getItemQuantity())).
                     append(COLUMN_SPACER_CHAR.repeat(COLUMN_SPACER_WIDTH)).
                     append(String.format(itemTableFormatUnitPriceColumn(), 
                             itemInSale.
                                     getItemInfo().
                                     getItemPrice().
                                     getPriceAfterTax() + 
-                            "/pc")).
+                            "/" + 
+                            itemInSale.
+                                    getItemQuantity().
+                                    getUnitString())).
                     append(COLUMN_SPACER_CHAR.repeat(COLUMN_SPACER_WIDTH)).
                     append(String.format(itemTableFormatPriceColumn(), 
                             itemInSale.
@@ -197,7 +203,7 @@ public class PrinterTest {
                 append("\n\n");
         
         DateTimeFormatter saleTimeFormat = 
-                DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' hh:mm:ss");
+                DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' HH:mm:ss");
         
         expectedOutput.
                 append(StringUtils.center(

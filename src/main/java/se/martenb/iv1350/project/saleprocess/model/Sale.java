@@ -1,7 +1,8 @@
 package se.martenb.iv1350.project.saleprocess.model;
 
-import se.martenb.iv1350.project.saleprocess.integration.ItemDTO;
-import se.martenb.iv1350.project.saleprocess.integration.SaleDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.ItemDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.SaleDTO;
+import se.martenb.iv1350.project.saleprocess.util.Quantity;
 
 /**
  * Represents an ongoing sale. 
@@ -26,17 +27,19 @@ public class Sale {
     }
     
     /**
-     * Add an item to the sale.
+     * Add an item to the sale. 
      * 
      * @param itemInfo What item to add.
      * @param quantity How many of the items to add.
      * 
      * @return The state of the updated sale in a {@link SaleDTO} object.
+     * @throws IllegalItemQuantityException if the quantity was invalid.
      */
-    public SaleDTO addItemToSale(ItemDTO itemInfo, int quantity) {
+    public SaleDTO addItemToSale(ItemDTO itemInfo, Quantity quantity) 
+            throws IllegalItemQuantityException {
         saleInformation.addItemToSale(itemInfo, quantity);
-        return saleInformation.getSaleDTO();
+        SaleDTO saleState = saleInformation.getSaleDTO();
+        return saleState;
     }
-    
     
 }

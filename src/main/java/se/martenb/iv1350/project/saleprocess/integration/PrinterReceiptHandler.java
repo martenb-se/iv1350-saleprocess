@@ -1,5 +1,11 @@
 package se.martenb.iv1350.project.saleprocess.integration;
 
+import se.martenb.iv1350.project.saleprocess.integration.dto.ItemInSaleDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.ReceiptDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.ItemDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.StoreDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.PurchaseDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.AddressDTO;
 import se.martenb.iv1350.project.saleprocess.util.Amount;
 import se.martenb.iv1350.project.saleprocess.util.PriceTotal;
 import java.time.LocalDateTime;
@@ -142,10 +148,11 @@ class PrinterReceiptHandler {
                 itemName));
         builderAddColumnSpacer(builder);
         builder.append(String.format(itemTableFormatQuantityColumn(), 
-                itemQuantity + " pc"));
+                itemInSaleInfo.getItemQuantity()));
         builderAddColumnSpacer(builder);
         builder.append(String.format(itemTableFormatUnitPriceColumn(), 
-                itemPriceAfterTax + "/pc"));
+                itemPriceAfterTax + "/" + 
+                        itemInSaleInfo.getItemQuantity().getUnitString()));
         builderAddColumnSpacer(builder);
         builder.append(String.format(itemTableFormatPriceColumn(), 
                 totalItemPriceAfterTax));
@@ -255,7 +262,7 @@ class PrinterReceiptHandler {
     private void builderAddDateAndTime(StringBuilder builder, 
             LocalDateTime saleDateTime) {
         DateTimeFormatter saleTimeFormat = 
-                DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' hh:mm:ss");
+                DateTimeFormatter.ofPattern("yyyy-MM-dd 'at' HH:mm:ss");
         String saleDateAndTimeCentered = StringUtils.center(
                 saleDateTime.format(saleTimeFormat), RECEIPT_TOTAL_WIDTH);
         

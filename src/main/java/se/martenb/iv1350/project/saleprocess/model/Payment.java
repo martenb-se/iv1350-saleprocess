@@ -1,38 +1,46 @@
 package se.martenb.iv1350.project.saleprocess.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import se.martenb.iv1350.project.saleprocess.util.Amount;
-import se.martenb.iv1350.project.saleprocess.integration.ItemInSaleDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.ItemInSaleDTO;
 import se.martenb.iv1350.project.saleprocess.util.PriceTotal;
-import se.martenb.iv1350.project.saleprocess.integration.PurchaseDTO;
-import se.martenb.iv1350.project.saleprocess.integration.ReceiptDTO;
-import se.martenb.iv1350.project.saleprocess.integration.SaleDTO;
-import se.martenb.iv1350.project.saleprocess.integration.StoreDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.PurchaseDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.ReceiptDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.SaleDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.StoreDTO;
 import se.martenb.iv1350.project.saleprocess.integration.StoreRegistry;
 
 /**
- * Represents handling payment for a ended sale.
+ * Represents handling payment for an ended sale.
  */
 public class Payment {
-    private final SaleDTO saleState;
     private final StoreRegistry storeRegistry;
     private final Register register;
     private final Amount totalDiscount;
+    private List<PurchaseObserver> purchaseObserverList = new ArrayList<>();
+    private SaleDTO saleState;
     
     /**
-     * Creates a new instance of an ongoing sale and sets the sale time to
-     * the current date/time. Discounts are not yet implemented and 
-     * defaulted to 0. 
+     * Creates a new instance of a payment handler. Discounts are not yet 
+     * implemented and defaulted to 0. 
      * 
-     * @param saleState Sale to handle payment for.
      * @param storeRegistry Registry containing store information.
      * @param register The register to put the paid amount into.
      */
-    public Payment(
-            SaleDTO saleState, StoreRegistry storeRegistry, Register register) {
-        this.saleState = saleState;
+    public Payment(StoreRegistry storeRegistry, Register register) {
         this.storeRegistry = storeRegistry;
         this.register = register;
         this.totalDiscount = new Amount(0);
+    }
+    
+    /**
+     * Start payment for the specified sale.
+     * 
+     * @param saleState Sale to handle payment for.
+     */
+    public void startPayment(SaleDTO saleState) {
+        this.saleState = saleState;
     }
     
     /**
@@ -121,6 +129,8 @@ public class Payment {
     /**
      * Pay for the sale and complete the purchase. 
      * Updates the amount available in the register.
+     * Will notify any {@link PurchaseObserver} listening for when new 
+     * purchases are made.
      * 
      * @param amountPaid The paid amount.
      * @return The receipt for the purchase.
@@ -134,7 +144,29 @@ public class Payment {
                 receipt.getPurchaseInfo().
                         getFinalPrice().
                         getTotalPriceAfterTaxes());
+        notifyObserversNewPurchase(purchaseInfo);
         
         return receipt;
+    }
+    
+    /**
+     * Add a {@link PurchaseObserver} to the ongoing sale.
+     * 
+     * @param purchaseObserver The observer to add.
+     */
+    public void addPurchaseObserver(PurchaseObserver purchaseObserver) {
+        purchaseObserverList.add(purchaseObserver);
+    }
+    
+    /**
+     * Notifies purchase observers about a finished purchase, giving them
+     * information about the purchase after the payment has been registered.
+     * 
+     * @param purchaseInfo Information about the purchase.
+     */
+    private void notifyObserversNewPurchase(PurchaseDTO purchaseInfo) {
+        for(PurchaseObserver purchaseObserver : purchaseObserverList) {
+            purchaseObserver.newRegisteredPurchase(purchaseInfo);
+        }
     }
 }

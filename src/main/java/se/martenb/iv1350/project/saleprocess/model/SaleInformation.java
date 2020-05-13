@@ -5,18 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import se.martenb.iv1350.project.saleprocess.util.Amount;
-import se.martenb.iv1350.project.saleprocess.integration.ItemDTO;
-import se.martenb.iv1350.project.saleprocess.integration.ItemInSaleDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.ItemDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.ItemInSaleDTO;
 import se.martenb.iv1350.project.saleprocess.util.Quantity;
-import se.martenb.iv1350.project.saleprocess.integration.SaleDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.SaleDTO;
 import se.martenb.iv1350.project.saleprocess.util.Unit;
 
 /**
  * Represents sale information for ongoing sale.
  */
 class SaleInformation {
-    private static final Unit UNIT_PIECE = Unit.PIECE;
-    
     private LocalDateTime saleTime;
     private Amount runningTotal;
     private List<Item> itemList = new ArrayList<>();
@@ -99,62 +97,73 @@ class SaleInformation {
     /**
      * Increases the quantity amount of an item in the current sale.
      * 
-     * @param itemInfo The item to increase the quantity of.
-     * @param quantityValue How much to increase the quantity value with.
+     * @param itemInfo The item to increase the {@link Quantity} of.
+     * @param quantity How much to increase the {@link Quantity} with.
      */
-    private void increaseItemQuantity(ItemDTO itemInfo, double quantityValue) {
+    private void increaseItemQuantity(ItemDTO itemInfo, Quantity quantity) {
+        double quantityValue = quantity.getNumericalValue();
         Item itemToIncreaseQuantityOf = getItemInSale(itemInfo);
         if (itemToIncreaseQuantityOf != null)
             itemToIncreaseQuantityOf.addQuantity(quantityValue);
+        if (quantity.getUnitType() == Unit.PIECE)
+            updateTotalPiecesOfItems(quantity);
     }
     
     /**
-     * Create a new piece of an {@link Item}.
+     * Create a new {@link Item}.
      * 
      * @param itemInfo What item to create.
-     * @param quantity How many of the item to create.
+     * @param quantity The {@link Quantity} of the item.
      * @return 
      */
-    private Item createPieceOfItemToPutInSale(ItemDTO itemInfo, int quantity) {
-        Quantity quantiyOfItem = new Quantity(quantity, UNIT_PIECE);
-        ItemInSaleDTO itemInformation = new ItemInSaleDTO(itemInfo, 
-                quantiyOfItem);
+    private Item createItemToPutInSale(ItemDTO itemInfo, Quantity quantity) {
+        ItemInSaleDTO itemInformation = new ItemInSaleDTO(itemInfo, quantity);
         return new Item(itemInformation);
     }
     
     /**
-     * Put a new piece of an {@link Item} in the current sale defined by an 
-     * {@link ItemDTO} with the specified amount.
+     * Put a new {@link Item} in the current sale defined by an {@link ItemDTO} 
+     * with the specified {@link Quantity}. Updates the total number of items
+     * added to the sale.
      * 
      * @param itemInfo What item to put into the sale.
-     * @param quantityValue How many to put into the sale.
+     * @param quantity How many to put into the sale.
      */
-    private void putNewPieceOfItemInSale(ItemDTO itemInfo, int quantity) {
-        Item newItemToPutInSale = 
-                createPieceOfItemToPutInSale(itemInfo, quantity);
+    private void putNewItemInSale(ItemDTO itemInfo, Quantity quantity) {
+        Item newItemToPutInSale = createItemToPutInSale(itemInfo, quantity);
         itemList.add(newItemToPutInSale);
+        updateTotalPiecesOfItems(quantity);
     }
     
     /**
      * Increases the count of total pieces of items in the current sale.
-     * Including duplicates of the same item and different items.
+     * Including duplicates of the same item and different items. Items that 
+     * are weighed or measured by volume will count as one piece.
      * 
      * @param quantity How much to increase the number of items with.
      */
-    private void increaseTotalPiecesOfItems(int quantity) {
-        totalItems += quantity;
+    private void updateTotalPiecesOfItems(Quantity quantity) {
+        int quantityValue = (int) quantity.getNumericalValue();
+        if(quantity.getUnitType() == Unit.PIECE)
+            totalItems += quantityValue;
+        else
+            totalItems += 1;
     }
     
     /**
      * Update the running total {@link Amount} with the total price of the 
-     * item(s) in specified quantity.
+     * item(s) in specified {@link Quantity}.
      * 
      * @param itemInfo Item to add the cost of.
-     * @param quantity How many of the items to add the cost of.
+     * @param quantity The {@link Quantity} of items to add the cost of.
      */
-    private void updateRunningTotal(ItemDTO itemInfo, int quantity) {
+    private void updateRunningTotal(ItemDTO itemInfo, Quantity quantity) {
+        double quantityValue = quantity.getNumericalValue();
         Amount amountCostOfAddedItems = 
-                itemInfo.getItemPrice().getPriceAfterTax().multiply(quantity);
+                itemInfo.
+                        getItemPrice().
+                        getPriceAfterTax().
+                        multiply(quantityValue);
         runningTotal = runningTotal.plus(amountCostOfAddedItems);
     }
     
@@ -162,18 +171,19 @@ class SaleInformation {
      * Add specified item to the current sale.
      * 
      * @param itemInfo Item to add to the sale.
-     * @param quantity How many to add to the sale.
+     * @param quantity The quantity of the item to add to the sale.
      */
-    void addItemToSale(ItemDTO itemInfo, int quantity) 
-            throws IllegalArgumentException {
-        if (quantity <= 0)
-            throw new IllegalArgumentException(
-                    "Quantity must be positive and greater than 0");
+    void addItemToSale(ItemDTO itemInfo, Quantity quantity) 
+            throws IllegalItemQuantityException {
+        double numericalQuantity = quantity.getNumericalValue();
+        if (numericalQuantity <= 0) {
+            int itemID = itemInfo.getItemID();
+            throw new IllegalItemQuantityException(itemID, quantity);
+        }
         if (isItemInSale(itemInfo))
             increaseItemQuantity(itemInfo, quantity);
         else
-            putNewPieceOfItemInSale(itemInfo, quantity);
-        increaseTotalPiecesOfItems(quantity);
+            putNewItemInSale(itemInfo, quantity);
         updateRunningTotal(itemInfo, quantity);
     }
     

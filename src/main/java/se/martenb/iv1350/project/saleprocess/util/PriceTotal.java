@@ -2,6 +2,7 @@ package se.martenb.iv1350.project.saleprocess.util;
 
 /**
  * Represents a total price including combined taxes of many added prices.
+ * All instances are immutable.
 */
 public class PriceTotal {
     private final Amount totalPriceAfterTaxes;

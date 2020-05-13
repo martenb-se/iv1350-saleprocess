@@ -2,17 +2,20 @@ package se.martenb.iv1350.project.saleprocess.testing;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
-import se.martenb.iv1350.project.saleprocess.integration.AddressDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.AddressDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.CustomerDTO;
 import se.martenb.iv1350.project.saleprocess.util.Amount;
-import se.martenb.iv1350.project.saleprocess.integration.ItemDTO;
-import se.martenb.iv1350.project.saleprocess.integration.ItemInSaleDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.ItemDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.ItemInSaleDTO;
 import se.martenb.iv1350.project.saleprocess.util.Price;
 import se.martenb.iv1350.project.saleprocess.util.PriceTotal;
-import se.martenb.iv1350.project.saleprocess.integration.PurchaseDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.PurchaseDTO;
 import se.martenb.iv1350.project.saleprocess.util.Quantity;
-import se.martenb.iv1350.project.saleprocess.integration.SaleDTO;
-import se.martenb.iv1350.project.saleprocess.integration.StoreDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.SaleDTO;
+import se.martenb.iv1350.project.saleprocess.integration.dto.StoreDTO;
 import se.martenb.iv1350.project.saleprocess.util.Unit;
 
 /**
@@ -52,6 +55,14 @@ public class TestingObjectCreator {
         return makeItemDTO(itemID, itemName, itemPrice);
     }
     
+    public CustomerDTO makeCustomerDTOSimple(int bithYear, int bithMonth, 
+            int birthDay) {
+        Date birthDate = 
+                new GregorianCalendar(bithYear, bithMonth, birthDay).getTime();
+        CustomerDTO customerInfo = new CustomerDTO(birthDate);
+        return customerInfo;
+    }
+    
     public ItemInSaleDTO findItemInSale(List<ItemInSaleDTO> itemsInSale,
             int itemID) {
         ItemInSaleDTO foundItemInSale = null;
@@ -81,10 +92,6 @@ public class TestingObjectCreator {
     public int getTotalItemsOfSale(SaleDTO saleDTO) {
         return saleDTO.getTotalItems();
     }
-    
-    /*
-     * Default testers
-     */
     
     public AddressDTO generateAddressDTO() {
         return new AddressDTO(streetName, streetNumber, postalCode, postTown);
